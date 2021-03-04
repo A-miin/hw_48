@@ -6,7 +6,8 @@ CATEGORY_CHOICES=[
     ('first meal','первые блюда'),
     ('second courses','вторые блюда'),
     ('the drinks','напитки '),
-    ('other','разное')]
+    ('other','разное'),
+]
 
 class Product(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False, verbose_name="Наименование")
