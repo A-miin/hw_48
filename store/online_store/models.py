@@ -5,7 +5,7 @@ CATEGORY_CHOICES=[
     ('breakfast','завтрак'),
     ('first meal','первые блюда'),
     ('second courses','вторые блюда'),
-    ('the drinks','напитки '),
+    ('drinks','напитки '),
     ('other','разное'),
 ]
 

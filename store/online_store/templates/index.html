@@ -3,7 +3,7 @@
 {% block content %}
 {% for product in products %}
     {% if product.remainder >= 1 %}
-        <div class="card text-center">
+        <div class="card text-center ">
           <div class="card-header text-capitalize ">
               {{ product.get_category_display }}
           </div>
@@ -11,7 +11,7 @@
             <h5 class="card-title">{{ product.name }}</h5>
             <a href="#" class="btn btn-outline-success">>Детальный просмотр</a>
           </div>
-          <div class="text-primary fs-5">
+          <div class="text-primary fs-5 mb-3">
             {{ product.price }}
           </div>
         </div>
