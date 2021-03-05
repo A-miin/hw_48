@@ -14,3 +14,7 @@ def index(request):
         name = request.POST.get('name')
         product = get_object_or_404(Product,name=name)
         return render(request, 'index.html', context={'product':product, 'form':form})
+
+def product_view(request, pk):
+    product = get_object_or_404(Product, id=pk)
+    return render(request, 'product_view.html', {'product':product})

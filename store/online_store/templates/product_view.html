@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block header-text %} Список товаров {% endblock header-text %}
+{% block content %}
+    <div class="card text-center">
+      <div class="card-header text-info">
+        Категория: {{ product.get_category_display}}
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Название: {{ product.name }}</h5>
+        <p class="card-text">Описание: {{ product.description}}</p>
+        <p class="text-primary mt-2 mb-2"> Цена: {{ product.price }}</p>
+      </div>
+      <div class="card-footer text-info">
+        Остаток: {{ product.remainder }}
+      </div>
+    </div>
+
+
+{% endblock content %}
