@@ -64,4 +64,12 @@ def product_update(request, pk):
             return render(request, 'product_update.html', context={'form':form, 'product':product})
 
 def product_delete(request, pk):
-    pass
+    product = get_object_or_404(Product, id=pk)
+    if request.method=='GET':
+        return render(request, 'product_delete.html', context={'product':product})
+    elif request.method=='POST':
+        if request.POST.get('action')=='Да':
+            product.delete()
+            return redirect('product_list')
+        else:
+            return redirect('product_view', product.id)
