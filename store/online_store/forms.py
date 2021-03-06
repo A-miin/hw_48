@@ -1,16 +1,20 @@
 from django import forms
 
 from .models import Product
+CATEGORY_CHOICES=[
+    ('breakfast','завтрак'),
+    ('first meal','первые блюда'),
+    ('second courses','вторые блюда'),
+    ('drinks','напитки '),
+    ('other','разное'),
+]
 
+class ProductForm(forms.ModelForm):
 
-# class ArticleForm(forms.ModelForm):
-#     """
-#     Форма для создания и редактирваония объектов статьи
-#     https://docs.djangoproject.com/en/3.1/ref/forms/
-#     """
-#     class Meta:
-#         model = Article
-#         fields = ('title', 'content', 'author')
+    class Meta:
+        model = Product
+        fields = ('name', 'description', 'category', 'price', 'remainder')
+
 
 class ProductSearchForm(forms.Form):
     name = forms.CharField(max_length=100)

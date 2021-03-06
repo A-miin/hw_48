@@ -23,19 +23,5 @@
             {% endif %}
         {% endfor %}
     {% endif %}
-    {% if product %}
-        <div class="card text-center ">
-                  <div class="card-header text-capitalize ">
-                      {{ product.get_category_display }}
-                  </div>
-                  <div class="card-body">
-                    <h5 class="card-title">{{ product.name }}</h5>
-                    <a href="{% url 'product_view' product.id %}" class="btn btn-outline-success">>Детальный просмотр</a>
-                  </div>
-                  <div class="text-primary fs-5 mb-3">
-                    {{ product.price }}
-                  </div>
-                </div>
-    {% endif %}
 
 {% endblock content %}
