@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block header-text %} Создать продукт {% endblock header-text %}
+{% block content %}
+   <form action="{% url 'product_update' product.pk %}" method="POST">
+        {% include 'forms.html' with button_text="Сохранить изменения" %}
+    </form>
+{% endblock content %}
