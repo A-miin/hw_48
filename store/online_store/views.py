@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Product
+from .models import Product, CATEGORY_CHOICES
 from django.shortcuts import get_object_or_404, redirect
 
 from .forms import ProductSearchForm, ProductForm
@@ -7,13 +7,22 @@ from .forms import ProductSearchForm, ProductForm
 def index(request):
     form = ProductSearchForm()
     if request.method=='GET':
-        products = Product.objects.all().order_by('category', 'name')
-        return render(request,'index.html', context={'products':products, 'form':form})
+        products = Product.objects.all().order_by('category', 'name').exclude(remainder=0)
+        return render(request,'index.html', context={'products':products, 'form':form, 'categories':CATEGORY_CHOICES})
     elif request.method=='POST':
-        print(request.POST)
         name = request.POST.get('name')
-        products = Product.objects.all().filter(name=name).order_by('category', 'name')
-        return render(request, 'index.html', context={'products':products, 'form':form})
+        products = Product.objects.all().filter(name=name).order_by('category', 'name').exclude(remainder=0)
+        return render(request, 'index.html', context={'products':products, 'form':form,'categories':CATEGORY_CHOICES})
+
+def product_category_list(request, category):
+    form = ProductSearchForm()
+    if request.method=='GET':
+        products = Product.objects.all().filter(category=category).order_by('name').exclude(remainder=0)
+        return render(request,'product_categories.html', context={'products':products, 'form':form, 'categories':CATEGORY_CHOICES})
+    elif request.method=='POST':
+        name = request.POST.get('name')
+        products = Product.objects.all().filter(category=category, name=name).order_by('name').exclude(remainder=0)
+        return render(request, 'product_categories.html', context={'products':products, 'form':form,'categories':CATEGORY_CHOICES})
 
 def product_view(request, pk):
     product = get_object_or_404(Product, id=pk)

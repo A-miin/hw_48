@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block title %} Страница создания нового продукта {% endblock title %}
 {% block header-text %} Создать продукт {% endblock header-text %}
 {% block content %}
    <form action="{% url 'product_create'  %}" method="POST">

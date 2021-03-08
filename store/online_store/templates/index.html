@@ -1,27 +1,14 @@
 {% extends 'base.html' %}
+{% block title %} Главная страница {% endblock title %}
 {% block header-text %} Список товаров {% endblock header-text %}
 {% block content %}
-    <form action="{% url 'product_list' %}" method="POST">
-        {% include 'forms.html' with button_text="Искать" %}
-    </form>
-
-    {% if products %}
-        {% for product in products %}
-            {% if product.remainder >= 1 %}
-                <div class="card text-center ">
-                  <div class="card-header text-capitalize ">
-                      {{ product.get_category_display }}
-                  </div>
-                  <div class="card-body">
-                    <h5 class="card-title">{{ product.name }}</h5>
-                    <a href="{% url 'product_view' product.id %}" class="btn btn-outline-success">>Детальный просмотр</a>
-                  </div>
-                  <div class="text-primary fs-5 mb-3">
-                    {{ product.price }}
-                  </div>
-                </div>
-            {% endif %}
+        <ul class="list-group list-group-flush">
+        <h4>Категории</h4>
+        {% for category, display_category in categories %}
+          <li class="list-group-item"><a class="nav-link active" aria-current="page" href="{% url "product_category_list" category%}">{{ display_category }}</a></li>
         {% endfor %}
-    {% endif %}
+        </ul>
+
+    {% include 'product_list.html' with product_list=products %}
 
 {% endblock content %}
