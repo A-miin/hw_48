@@ -95,6 +95,8 @@ class AddToCartView(View):
             cart_product = CartProduct.objects.get(product=product)
             if product.remainder>=cart_product.qty+1:
                 cart_product.qty+=1
+                cart_product.save()
+            print('cart qty=',cart_product.qty)
         except CartProduct.DoesNotExist:
             if product.remainder!=0:
                 CartProduct.objects.create(product=product, qty=1)
