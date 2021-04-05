@@ -22,7 +22,10 @@ class IndexProductView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        if self.kwargs.get('category'):
+            queryset = queryset.filter(category=self.kwargs.get('category'))
         queryset = queryset.exclude(remainder=0)
+        print('kwargs=',self.kwargs)
 
         if self.search_data:
             queryset = queryset.filter(
@@ -38,31 +41,18 @@ class IndexProductView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = CATEGORY_CHOICES
+        context['form'] = ProductForm()
         context['search_form'] = self.form
+
 
         if self.search_data:
             context['query'] = urlencode({'search_value': self.search_data})
         return context
 
-def index(request):
-    form = ProductSearchForm()
-    if request.method=='GET':
-        products = Product.objects.all().order_by('category', 'name').exclude(remainder=0)
-        return render(request, 'product/index.html', context={'products':products, 'form':form, 'categories':CATEGORY_CHOICES})
-    elif request.method=='POST':
-        name = request.POST.get('name')
-        products = Product.objects.all().filter(name=name).order_by('category', 'name').exclude(remainder=0)
-        return render(request, 'product/index.html', context={'products':products, 'form':form, 'categories':CATEGORY_CHOICES})
-
-def product_category_list(request, category):
-    form = ProductSearchForm()
-    if request.method=='GET':
-        products = Product.objects.all().filter(category=category).order_by('name').exclude(remainder=0)
-        return render(request, 'product/categories.html', context={'products':products, 'form':form, 'categories':CATEGORY_CHOICES})
-    elif request.method=='POST':
-        name = request.POST.get('name')
-        products = Product.objects.all().filter(category=category, name=name).order_by('name').exclude(remainder=0)
-        return render(request, 'product/categories.html', context={'products':products, 'form':form, 'categories':CATEGORY_CHOICES})
+class ViewProductView(DetailView):
+    template_name = 'product/view.html'
+    queryset = Product.objects.exclude(remainder=0)
+    context_object_name = 'product'
 
 def product_view(request, pk):
     product = get_object_or_404(Product, id=pk)
