@@ -91,44 +91,11 @@
   "model": "online_store.product",
   "pk": 12,
   "fields": {
-    "name": "Вася",
+    "name": "Вася не блюдо",
     "description": "описание",
     "category": "breakfast",
     "remainder": 14,
     "price": "156.00"
-  }
-},
-{
-  "model": "online_store.product",
-  "pk": 13,
-  "fields": {
-    "name": "блюдо13",
-    "description": "описание 13",
-    "category": "first meal",
-    "remainder": 13,
-    "price": "13.00"
-  }
-},
-{
-  "model": "online_store.product",
-  "pk": 14,
-  "fields": {
-    "name": "блюдо 14",
-    "description": "описание 14",
-    "category": "other",
-    "remainder": 14,
-    "price": "14.00"
-  }
-},
-{
-  "model": "online_store.product",
-  "pk": 15,
-  "fields": {
-    "name": "блюдо 15",
-    "description": "описание 15",
-    "category": "second courses",
-    "remainder": 15,
-    "price": "25.00"
   }
 },
 {
@@ -151,6 +118,83 @@
     "category": "breakfast",
     "remainder": 17,
     "price": "17.00"
+  }
+},
+{
+  "model": "online_store.product",
+  "pk": 18,
+  "fields": {
+    "name": "Амин",
+    "description": "ждбд",
+    "category": "other",
+    "remainder": 54,
+    "price": "5.00"
+  }
+},
+{
+  "model": "online_store.order",
+  "pk": 1,
+  "fields": {
+    "name": "bebekkk",
+    "tel": "0704000000",
+    "address": "';,';",
+    "created_at": "2021-04-05T12:31:34.918Z"
+  }
+},
+{
+  "model": "online_store.order",
+  "pk": 2,
+  "fields": {
+    "name": "bebekkk",
+    "tel": "0704000000",
+    "address": "';,';",
+    "created_at": "2021-04-05T12:37:39.538Z"
+  }
+},
+{
+  "model": "online_store.order",
+  "pk": 3,
+  "fields": {
+    "name": "hey",
+    "tel": "0704000000",
+    "address": "';,';",
+    "created_at": "2021-04-05T12:38:17.577Z"
+  }
+},
+{
+  "model": "online_store.productorder",
+  "pk": 1,
+  "fields": {
+    "product": 12,
+    "order": 2,
+    "qty": 1
+  }
+},
+{
+  "model": "online_store.productorder",
+  "pk": 2,
+  "fields": {
+    "product": 7,
+    "order": 2,
+    "qty": 1
+  }
+},
+{
+  "model": "online_store.productorder",
+  "pk": 3,
+  "fields": {
+    "product": 12,
+    "order": 3,
+    "qty": 1
+  }
+},
+{
+  "model": "online_store.productorder",
+  "pk": 4,
+  "fields": {
+    "product": 17,
+    "order": 3,
+    "qty": 1
   }
 },
 {
