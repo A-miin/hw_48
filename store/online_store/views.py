@@ -1,12 +1,12 @@
 from django.shortcuts import render
-from .models import Product, CATEGORY_CHOICES
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from django.urls import reverse, reverse_lazy
 from django.db.models import Q
 from django.utils.http import urlencode
 
 from .forms import ProductSearchForm, ProductForm, SearchForm
+from .models import Product, CATEGORY_CHOICES, CartProduct
 # Create your views here.
 class IndexProductView(ListView):
     template_name = 'product/index.html'
@@ -86,13 +86,30 @@ class DeleteProductView(DeleteView):
         queryset = queryset.exclude(remainder=0)
         return queryset
 
-def product_delete(request, pk):
-    product = get_object_or_404(Product, id=pk)
-    if request.method=='GET':
-        return render(request, 'product/delete.html', context={'product':product})
-    elif request.method=='POST':
-        if request.POST.get('action')=='Да':
-            product.delete()
-            return redirect('product_list')
-        else:
-            return redirect('product_view', product.id)
+
+class AddToCartView(View):
+    def get(self, request, *args, **kwargs):
+        product = get_object_or_404(Product,id=kwargs.get('pk'))
+        print('chek')
+        try:
+            cart_product = CartProduct.objects.get(product=product)
+            if product.remainder>=cart_product.qty+1:
+                cart_product.qty+=1
+        except CartProduct.DoesNotExist:
+            if product.remainder!=0:
+                CartProduct.objects.create(product=product, qty=1)
+        return redirect('product_list')
+
+class IndexCartView(ListView):
+    template_name = 'basket/index.html'
+    model = CartProduct
+    context_object_name = 'products'
+
+class DeleteCartView(DeleteView):
+    model = CartProduct
+    success_url = reverse_lazy('cart_list')
+    def get(self, request, *args, **kwargs):
+        return self.delete(request, *args, **kwargs)
+
+
+

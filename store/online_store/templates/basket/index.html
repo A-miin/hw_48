@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %} Корзина {% endblock title %}
+{% block header-text %} Список товаров в корзине {% endblock header-text %}
+{% block content %}
+    {% if not products %}
+        <h3>Нет товаров в корзине</h3>
+    {% endif %}
+    <table class="table">
+            <thead>
+            <tr>
+              <th scope="col">Название</th>
+              <th scope="col">Цена</th>
+              <th scope="col">Количество</th>
+              <th scope="col">Сумма</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+    <tbody>
+    {% for product in products %}
+            <tr>
+              <td> {{ product.product.name }}</td>
+              <td>{{ product.product.price }}</td>
+              <td>{{ product.qty }}</td>
+              <td>{{ product.summa }}</td>
+              <td><a href="{% url "cart-delete" product.id%}" class="btn btn-outline-danger">Удалить</a></td>
+            </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+    {% if products %}
+        <h3>Итого {{ products.first.get_all }}</h3>
+    {% endif %}
+{% endblock content %}

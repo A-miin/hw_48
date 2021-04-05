@@ -6,6 +6,7 @@
               <div class="card-body">
                 <h5 class="card-title">{{ product.name }}</h5>
                 <a href="{% url 'product_view' product.id %}" class="btn btn-outline-success">>Детальный просмотр</a>
+                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-outline-primary">>Добавить в корзину</a>
               </div>
               <div class="text-primary fs-5 mb-3">
                 {{ product.price }}

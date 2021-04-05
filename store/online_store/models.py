@@ -24,3 +24,21 @@ class Product(models.Model):
 
     def __str__(self):
         return f'{self.id}. {self.name}: {self.price}'
+
+class CartProduct(models.Model):
+    product = models.ForeignKey('online_store.Product', on_delete=models.CASCADE, related_name='cart_products', verbose_name='продукт')
+    qty = models.IntegerField(validators=[MinValueValidator(0)])
+
+    class Meta:
+        verbose_name="товар в корзине"
+        verbose_name_plural="товары в корзине"
+
+    def summa(self):
+        return self.product.price*self.qty
+
+    def get_all(self):
+        summa=0
+        for obj in CartProduct.objects.all():
+            summa+=obj.summa()
+
+        return summa
