@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Product
+from .models import Product, Order
 CATEGORY_CHOICES=[
     ('breakfast','завтрак'),
     ('first meal','первые блюда'),
@@ -21,3 +21,8 @@ class ProductSearchForm(forms.Form):
 
 class SearchForm(forms.Form):
     search_value = forms.CharField(max_length=100, required=False, label='Найти')
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model=Order
+        fields=('name', 'tel', 'address')

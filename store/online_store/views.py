@@ -5,8 +5,8 @@ from django.urls import reverse, reverse_lazy
 from django.db.models import Q
 from django.utils.http import urlencode
 
-from .forms import ProductSearchForm, ProductForm, SearchForm
-from .models import Product, CATEGORY_CHOICES, CartProduct
+from .forms import ProductSearchForm, ProductForm, SearchForm, OrderForm
+from .models import Product, CATEGORY_CHOICES, CartProduct, ProductOrder, Order
 # Create your views here.
 class IndexProductView(ListView):
     template_name = 'product/index.html'
@@ -105,11 +105,36 @@ class IndexCartView(ListView):
     model = CartProduct
     context_object_name = 'products'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form']=OrderForm()
+        return context
+
+
 class DeleteCartView(DeleteView):
     model = CartProduct
     success_url = reverse_lazy('cart_list')
     def get(self, request, *args, **kwargs):
         return self.delete(request, *args, **kwargs)
 
+class CreateOrderView(View):
+    def post(self, request, *args, **kwargs):
+        form = OrderForm(data=request.POST)
+        if form.is_valid():
+            order = Order.objects.create(
+                name=form.cleaned_data.get('name'),
+                tel=form.cleaned_data.get('tel'),
+                address=form.cleaned_data.get('address')
+            )
+            for product in CartProduct.objects.all():
+                product_order=ProductOrder.objects.create(order=order, product=product.product, qty=product.qty)
+                product_order.save()
+
+            CartProduct.objects.all().delete()
+            return redirect('product_list')
+        else:
+            print(form.errors)
+            print('errors')
+            return redirect('cart_list')
 
 

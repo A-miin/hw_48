@@ -42,3 +42,24 @@ class CartProduct(models.Model):
             summa+=obj.summa()
 
         return summa
+
+class Order(models.Model):
+    name = models.CharField(max_length=128)
+    tel = models.CharField(max_length=128)
+    address = models.CharField(max_length=256)
+    created_at=models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+class ProductOrder(models.Model):
+    product = models.ForeignKey('online_store.Product', on_delete=models.CASCADE, related_name='orders')
+    order = models.ForeignKey('online_store.Order', on_delete=models.CASCADE, related_name='products')
+    qty = models.IntegerField(validators=[MinValueValidator(0)])
+
+    class Meta:
+        verbose_name='Заказ'
+        verbose_name_plural='Заказы'
+
+    def __str__(self):
+        return f'{self.order.name}:{self.product.name}-{self.qty}'

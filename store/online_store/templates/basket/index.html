@@ -30,4 +30,7 @@
     {% if products %}
         <h3>Итого {{ products.first.get_all }}</h3>
     {% endif %}
+    <form action="{% url 'order_create'  %}" method="POST">
+        {% include 'forms.html' with button_text="Оформить заказ" %}
+    </form>
 {% endblock content %}
