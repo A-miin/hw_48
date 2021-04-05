@@ -29,7 +29,7 @@ class IndexProductView(ListView):
 
         if self.search_data:
             queryset = queryset.filter(
-                Q(summary__icontains=self.search_data) |
+                Q(name__icontains=self.search_data) |
                 Q(description__icontains=self.search_data))
         return queryset
 
@@ -41,7 +41,6 @@ class IndexProductView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = CATEGORY_CHOICES
-        context['form'] = ProductForm()
         context['search_form'] = self.form
 
 
@@ -54,53 +53,38 @@ class ViewProductView(DetailView):
     queryset = Product.objects.exclude(remainder=0)
     context_object_name = 'product'
 
-def product_view(request, pk):
-    product = get_object_or_404(Product, id=pk)
-    return render(request, 'product/view.html', {'product':product})
+class CreateProductView(CreateView):
+    template_name = 'product/create.html'
+    model = Product
+    form_class = ProductForm
 
-def product_create(request):
-    if request.method=='GET':
-        form = ProductForm()
-        return render(request, 'product/create.html', {'form':form})
-    elif request.method=='POST':
-        form = ProductForm(data=request.POST)
-        if form.is_valid():
-            product = Product.objects.create(
-                name=form.cleaned_data.get('name'),
-                category=form.cleaned_data.get('category'),
-                description=form.cleaned_data.get('description'),
-                remainder=form.cleaned_data.get('remainder'),
-                price=form.cleaned_data.get('price')
-            )
-            return redirect('product_view',product.id)
-        else:
-            return render(request, 'product/create.html', context={'form':form})
+    def get_success_url(self):
+        return reverse('product_view', kwargs={'pk': self.object.pk})
 
-def product_update(request, pk):
-    product = get_object_or_404(Product, id=pk)
-    if request.method=='GET':
-        form = ProductForm(
-            initial={
-                'name':product.name,
-                'category':product.category,
-                'description':product.description,
-                'remainder':product.remainder,
-                'price':product.price
-            }
-        )
-        return render(request, 'product/update.html', context={'form':form, 'product':product})
-    elif request.method=='POST':
-        form=ProductForm(data=request.POST)
-        if form.is_valid():
-            product.name = form.cleaned_data.get('name')
-            product.category = form.cleaned_data.get('category')
-            product.description = form.cleaned_data.get('description')
-            product.remainder = form.cleaned_data.get('remainder')
-            product.price = form.cleaned_data.get('price')
-            product.save()
-            return redirect('product_view', product.id)
-        else:
-            return render(request, 'product/update.html', context={'form':form, 'product':product})
+class UpdateProductView(UpdateView):
+    form_class = ProductForm
+    model = Product
+    template_name = 'product/update.html'
+    context_object_name = 'product'
+
+    def get_success_url(self):
+        return reverse('product_view', kwargs={'pk':self.object.pk})
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.exclude(remainder=0)
+        return queryset
+
+class DeleteProductView(DeleteView):
+    template_name = 'product/delete.html'
+    model = Product
+    context_object_name = 'product'
+    success_url = reverse_lazy('product_list')
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.exclude(remainder=0)
+        return queryset
 
 def product_delete(request, pk):
     product = get_object_or_404(Product, id=pk)

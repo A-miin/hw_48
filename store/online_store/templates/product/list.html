@@ -1,6 +1,3 @@
-<form action="{% url 'product_list' %}" method="POST">
-    {% include 'forms.html' with button_text="Искать" %}
-</form>
     {% for product in product_list %}
             <div class="card text-center ">
               <div class="card-header text-capitalize ">
