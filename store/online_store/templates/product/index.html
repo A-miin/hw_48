@@ -8,7 +8,8 @@
           <li class="list-group-item"><a class="nav-link active" aria-current="page" href="{% url "product_category_list" category%}">{{ display_category }}</a></li>
         {% endfor %}
         </ul>
-
-    {% include 'product_list.html' with product_list=products %}
+    {% include "partial/search_form.html" %}
+    {% include 'product/list.html' with product_list=products %}
+    {% include 'partial/paginate.html' %}
 
 {% endblock content %}
