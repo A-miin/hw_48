@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404, redirect
@@ -19,6 +20,7 @@ class IndexProductView(ListView):
     def get(self,request, **kwargs):
         self.form = SearchForm(request.GET)
         self.search_data = self.get_search_data()
+        print(f'session={self.request.session.get("products",{})}')
         return super().get(request, **kwargs)
 
     def get_queryset(self):
@@ -54,7 +56,8 @@ class ViewProductView(DetailView):
     queryset = Product.objects.exclude(remainder=0)
     context_object_name = 'product'
 
-class CreateProductView(CreateView):
+class CreateProductView(PermissionRequiredMixin, CreateView):
+    permission_required = ['online_store.add_product']
     template_name = 'product/create.html'
     model = Product
     form_class = ProductForm
@@ -62,7 +65,8 @@ class CreateProductView(CreateView):
     def get_success_url(self):
         return reverse('product_view', kwargs={'pk': self.object.pk})
 
-class UpdateProductView(UpdateView):
+class UpdateProductView(PermissionRequiredMixin,UpdateView):
+    permission_required = ['online_store.change_product']
     form_class = ProductForm
     model = Product
     template_name = 'product/update.html'
@@ -76,7 +80,8 @@ class UpdateProductView(UpdateView):
         queryset = queryset.exclude(remainder=0)
         return queryset
 
-class DeleteProductView(DeleteView):
+class DeleteProductView(PermissionRequiredMixin, DeleteView):
+    permission_required = ['online_store.delete_product']
     template_name = 'product/delete.html'
     model = Product
     context_object_name = 'product'
@@ -93,15 +98,26 @@ class AddToCartView(View):
         product = get_object_or_404(Product,id=kwargs.get('pk'))
         try:
             cart_product = CartProduct.objects.get(product=product)
-            if product.remainder>=1:
+            if product.remainder>0:
                 cart_product.qty+=1
                 product.remainder-=1
                 product.save()
                 cart_product.save()
-            print('cart qty=',cart_product.qty)
+                if 'products' not in request.session:
+                    request.session['products'] = {}
+                products = request.session.get('products', {})
+                products[product.name] = cart_product.qty
+                request.session['products'] = products
         except CartProduct.DoesNotExist:
             if product.remainder!=0:
-                CartProduct.objects.create(product=product, qty=1)
+                cart_product=CartProduct.objects.create(product=product, qty=1)
+                product.remainder -= 1
+                product.save()
+                if 'products' not in request.session:
+                    request.session['products'] = {}
+                products = request.session.get('products', {})
+                products[product.name] = cart_product.qty
+                request.session['products'] = products
         return redirect('cart_list')
 
 class IndexCartView(ListView):
@@ -124,10 +140,15 @@ class DeleteCartView(DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
-        product = Product.objects.get(name=self.object.product.name)
+        product = Product.objects.get(id=self.object.product.id)
         product.remainder+=self.object.qty
         product.save()
+        products = request.session.get('products', {})
+        products[product.name] = None
+        request.session['products'] = products
+        self.request.session['products'][product.name] = None
         self.object.delete()
+
         return HttpResponseRedirect(success_url)
 
 class CreateOrderView(View):

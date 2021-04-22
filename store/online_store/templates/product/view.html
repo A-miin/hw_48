@@ -2,12 +2,16 @@
 {% block title %} Страница продукта {% endblock title %}
 {% block header-text %} Детальный просмотр товара {% endblock header-text %}
 {% block nav %}
-    <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="{% url "product_update" product.pk %}">Редактировать</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="{% url "product_delete" product.pk %}">Удалить</a>
-    </li>
+    {% if user.is_authenticated and perms.online_store.change_product %}
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url "product_update" product.pk %}">Редактировать</a>
+        </li>
+    {% endif %}
+    {% if user.is_authenticated and perms.online_store.delete_product %}
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url "product_delete" product.pk %}">Удалить</a>
+        </li>
+    {% endif %}
 {% endblock nav %}
 {% block content %}
     <div class="card text-center">
