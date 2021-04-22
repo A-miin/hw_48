@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% block title %} Корзина {% endblock title %}
 {% block header-text %} Список товаров в корзине {% endblock header-text %}
+
 {% block content %}
+    {% include "partial/messages.html" %}
     {% if not products %}
         <h3>Нет товаров в корзине</h3>
     {% endif %}

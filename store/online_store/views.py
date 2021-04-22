@@ -6,6 +6,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.urls import reverse, reverse_lazy
 from django.db.models import Q
 from django.utils.http import urlencode
+from django.contrib import messages
 
 from .forms import ProductSearchForm, ProductForm, SearchForm, OrderForm
 from .models import Product, CATEGORY_CHOICES, CartProduct, ProductOrder, Order
@@ -108,6 +109,9 @@ class AddToCartView(View):
                 products = request.session.get('products', {})
                 products[product.name] = cart_product.qty
                 request.session['products'] = products
+                messages.success(self.request, f'{product.name} : 1 item added')
+            else:
+                messages.error(self.request, f'Cannot add {product.name}')
         except CartProduct.DoesNotExist:
             if product.remainder!=0:
                 cart_product=CartProduct.objects.create(product=product, qty=1)
@@ -118,6 +122,11 @@ class AddToCartView(View):
                 products = request.session.get('products', {})
                 products[product.name] = cart_product.qty
                 request.session['products'] = products
+                messages.success(self.request, f'{product.name} : 1 item added')
+            else:
+                messages.error(self.request, f'Cannot add {product.name}')
+
+
         return redirect('cart_list')
 
 class IndexCartView(ListView):
@@ -147,6 +156,7 @@ class DeleteCartView(DeleteView):
         products[product.name] = None
         request.session['products'] = products
         self.request.session['products'][product.name] = None
+        messages.warning(self.request, f'{product.name} deleted')
         self.object.delete()
 
         return HttpResponseRedirect(success_url)
