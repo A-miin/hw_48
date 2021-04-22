@@ -39,7 +39,7 @@
     "name": "Окрошка",
     "description": "Окро́шка (от глагола крошить — мелко нареза́ть) — традиционное блюдо национальной русской[1] кухни, холодный суп[2][3].\r\n\r\nРецепты окрошки появились ещё на заре русской кулинарной литературы, в конце XVIII века — в частности, в труде Николая Осипова «Старинная русская хозяйка, ключница и стряпуха»[4], а родственное ей блюдо — ботвинья — упоминается ещё раньше, в «Домострое». Образ окрошки как символа эклектики («махистская окрошка») использует Ленин в работе «Материализм и эмпириокритицизм» (1908 год).",
     "category": "first meal",
-    "remainder": 20,
+    "remainder": 21,
     "price": "200.00"
   }
 },
@@ -72,7 +72,7 @@
     "name": "Яичница",
     "description": "Яи́чница — блюдо, приготовляемое на сковороде из разбитых яиц. Традиционный завтрак в Великобритании и Ирландии — яичница с беконом. Испанская яичница «уэвос» (huevos) может подаваться на лепёшке.",
     "category": "breakfast",
-    "remainder": 5,
+    "remainder": 6,
     "price": "100.00"
   }
 },
@@ -94,7 +94,7 @@
     "name": "Вася не блюдо",
     "description": "описание",
     "category": "breakfast",
-    "remainder": 14,
+    "remainder": 20,
     "price": "156.00"
   }
 },
@@ -111,24 +111,24 @@
 },
 {
   "model": "online_store.product",
-  "pk": 17,
-  "fields": {
-    "name": "блюдо 17",
-    "description": "описание17",
-    "category": "breakfast",
-    "remainder": 17,
-    "price": "17.00"
-  }
-},
-{
-  "model": "online_store.product",
   "pk": 18,
   "fields": {
     "name": "Амин",
     "description": "ждбд",
     "category": "other",
-    "remainder": 54,
+    "remainder": 55,
     "price": "5.00"
+  }
+},
+{
+  "model": "online_store.product",
+  "pk": 19,
+  "fields": {
+    "name": "Окрошка",
+    "description": "lmokkmk",
+    "category": "second courses",
+    "remainder": 3,
+    "price": "56.00"
   }
 },
 {
@@ -162,6 +162,16 @@
   }
 },
 {
+  "model": "online_store.order",
+  "pk": 4,
+  "fields": {
+    "name": "new",
+    "tel": "new",
+    "address": "neweewew",
+    "created_at": "2021-04-05T12:59:16.500Z"
+  }
+},
+{
   "model": "online_store.productorder",
   "pk": 1,
   "fields": {
@@ -190,10 +200,37 @@
 },
 {
   "model": "online_store.productorder",
-  "pk": 4,
+  "pk": 5,
   "fields": {
-    "product": 17,
-    "order": 3,
+    "product": 1,
+    "order": 4,
+    "qty": 1
+  }
+},
+{
+  "model": "online_store.productorder",
+  "pk": 6,
+  "fields": {
+    "product": 4,
+    "order": 4,
+    "qty": 1
+  }
+},
+{
+  "model": "online_store.productorder",
+  "pk": 7,
+  "fields": {
+    "product": 12,
+    "order": 4,
+    "qty": 4
+  }
+},
+{
+  "model": "online_store.productorder",
+  "pk": 8,
+  "fields": {
+    "product": 7,
+    "order": 4,
     "qty": 1
   }
 },
@@ -202,7 +239,7 @@
   "pk": 1,
   "fields": {
     "password": "pbkdf2_sha256$216000$GnzSx6LOG7y5$cl/CXjbspHZnnOtA6WCP0oBxVN8tQIonBeUAApjdyoU=",
-    "last_login": "2021-04-05T09:19:03.674Z",
+    "last_login": "2021-04-22T19:33:33.757Z",
     "is_superuser": true,
     "username": "admin",
     "first_name": "",
@@ -211,6 +248,44 @@
     "is_staff": true,
     "is_active": true,
     "date_joined": "2021-03-04T14:03:48.845Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$216000$G0nGskuWHsXH$Z1hsrpMkFCAmQinyUKNX1tD7tGv4W0f46jhq5V26FzM=",
+    "last_login": "2021-04-22T19:39:31.096Z",
+    "is_superuser": false,
+    "username": "moder",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2021-04-22T19:08:07Z",
+    "groups": [
+      1
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$216000$rI8OfnlqBQAV$OEzp1heCN9a6r8mlVkafLcbFoV/daOluxcpw9bxyYXw=",
+    "last_login": "2021-04-22T19:33:50.136Z",
+    "is_superuser": false,
+    "username": "user",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2021-04-22T19:10:10Z",
     "groups": [],
     "user_permissions": []
   }
