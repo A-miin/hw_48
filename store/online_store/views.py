@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
@@ -90,17 +91,18 @@ class DeleteProductView(DeleteView):
 class AddToCartView(View):
     def get(self, request, *args, **kwargs):
         product = get_object_or_404(Product,id=kwargs.get('pk'))
-        print('chek')
         try:
             cart_product = CartProduct.objects.get(product=product)
-            if product.remainder>=cart_product.qty+1:
+            if product.remainder>=1:
                 cart_product.qty+=1
+                product.remainder-=1
+                product.save()
                 cart_product.save()
             print('cart qty=',cart_product.qty)
         except CartProduct.DoesNotExist:
             if product.remainder!=0:
                 CartProduct.objects.create(product=product, qty=1)
-        return redirect('product_list')
+        return redirect('cart_list')
 
 class IndexCartView(ListView):
     template_name = 'basket/index.html'
@@ -118,6 +120,15 @@ class DeleteCartView(DeleteView):
     success_url = reverse_lazy('cart_list')
     def get(self, request, *args, **kwargs):
         return self.delete(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        product = Product.objects.get(name=self.object.product.name)
+        product.remainder+=self.object.qty
+        product.save()
+        self.object.delete()
+        return HttpResponseRedirect(success_url)
 
 class CreateOrderView(View):
     def post(self, request, *args, **kwargs):
