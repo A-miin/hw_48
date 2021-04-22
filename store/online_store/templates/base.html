@@ -21,6 +21,15 @@
       </li>
         {% block nav %}
         {% endblock nav %}
+        {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link " aria-current="page" href="{% url "accounts:logout" %}?next={{ request.get_full_path }}">Logout</a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link " aria-current="page" href="{% url "accounts:login" %}?next={% if request.GET.next %}{{ request.GET.next }}{% else %}{{ request.get_full_path }}{% endif %}">Login</a>
+            </li>
+        {% endif %}
     </ul>
         <h2>{% block header-text %}{% endblock header-text %}</h2>
         {% block content %} {% endblock content %}

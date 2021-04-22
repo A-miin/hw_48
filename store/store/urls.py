@@ -20,4 +20,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('online_store.urls')),  # подключаем URLs из приложения online-store
+    path('accounts/', include('accounts.urls')),
 ]

@@ -3,6 +3,6 @@
 {% block header-text %} Создать продукт {% endblock header-text %}
 {% block content %}
    <form action="{% url 'product_create'  %}" method="POST">
-        {% include 'forms.html' with button_text="Создать" %}
+        {% include 'partial/forms.html' with button_text="Создать" %}
     </form>
 {% endblock content %}
