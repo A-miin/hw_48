@@ -29,6 +29,9 @@
             <li class="nav-item">
                 <a class="nav-link " aria-current="page" href="{% url "accounts:login" %}?next={% if request.GET.next %}{{ request.GET.next }}{% else %}{{ request.get_full_path }}{% endif %}">Login</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link " aria-current="page" href="{% url "accounts:register" %}?next={% if request.GET.next %}{{ request.GET.next }}{% else %}{{ request.get_full_path }}{% endif %}">Register</a>
+            </li>
         {% endif %}
     </ul>
         <h2>{% block header-text %}{% endblock header-text %}</h2>

@@ -11,7 +11,7 @@ from .views import (
     DeleteCartView,
     CreateOrderView
 )
-
+# app_name = 'store'
 urlpatterns = [
     path('', IndexProductView.as_view(), name='product_list'),  # URL для отображения списка productov
     path('<category>', IndexProductView.as_view(), name='product_category_list'),  # URL для отображения списка productov
