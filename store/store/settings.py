@@ -40,6 +40,8 @@ INSTALLED_APPS = [
 
     #custom apps
     'online_store',
+    'accounts',
+
 ]
 
 MIDDLEWARE = [
