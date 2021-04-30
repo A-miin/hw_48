@@ -6,7 +6,7 @@
     "name": "Фруктовый чай",
     "description": "Невероятно ароматный фруктовый чай привнесет в ваше утро или вечер новые вкусовые нотки. Его можно подать как с сахаром, так и с медом, только последний ингредиент необходимо добавлять в остывший до 35 градусов напиток, так как его нежелательно прогревать.\r\n\r\nВ качестве фруктов идеально подойдут яблоки любого сорта, персики, абрикосы, груши и т.д. – выбирайте по своему вкусу и фруктовому разнообразию, имеющемуся в наличии. Не забывайте добавлять корицу: молотую или в палочках, ванильный сахар, свежую мяту и другие ароматизаторы – они сделают напиток еще ароматнее и вкуснее. Заварку выбирайте, исходя из предпочтений тех, кого вы будете угощать чаем: черную или зеленую.",
     "category": "drinks",
-    "remainder": 50,
+    "remainder": 48,
     "price": "150.00"
   }
 },
@@ -17,7 +17,7 @@
     "name": "Пицца со шпинатом",
     "description": "Отличная пицца с ярким шпинатом, питательным сыром, свежими помидорками! Очень сытная, необычная и эффектная!",
     "category": "other",
-    "remainder": 30,
+    "remainder": 28,
     "price": "350.00"
   }
 },
@@ -39,7 +39,7 @@
     "name": "Окрошка",
     "description": "Окро́шка (от глагола крошить — мелко нареза́ть) — традиционное блюдо национальной русской[1] кухни, холодный суп[2][3].\r\n\r\nРецепты окрошки появились ещё на заре русской кулинарной литературы, в конце XVIII века — в частности, в труде Николая Осипова «Старинная русская хозяйка, ключница и стряпуха»[4], а родственное ей блюдо — ботвинья — упоминается ещё раньше, в «Домострое». Образ окрошки как символа эклектики («махистская окрошка») использует Ленин в работе «Материализм и эмпириокритицизм» (1908 год).",
     "category": "first meal",
-    "remainder": 21,
+    "remainder": 20,
     "price": "200.00"
   }
 },
@@ -72,7 +72,7 @@
     "name": "Яичница",
     "description": "Яи́чница — блюдо, приготовляемое на сковороде из разбитых яиц. Традиционный завтрак в Великобритании и Ирландии — яичница с беконом. Испанская яичница «уэвос» (huevos) может подаваться на лепёшке.",
     "category": "breakfast",
-    "remainder": 6,
+    "remainder": 3,
     "price": "100.00"
   }
 },
@@ -94,7 +94,7 @@
     "name": "Вася не блюдо",
     "description": "описание",
     "category": "breakfast",
-    "remainder": 20,
+    "remainder": 9,
     "price": "156.00"
   }
 },
@@ -116,7 +116,7 @@
     "name": "Амин",
     "description": "ждбд",
     "category": "other",
-    "remainder": 55,
+    "remainder": 53,
     "price": "5.00"
   }
 },
@@ -132,12 +132,24 @@
   }
 },
 {
+  "model": "online_store.product",
+  "pk": 23,
+  "fields": {
+    "name": "bebekkk",
+    "description": "",
+    "category": "breakfast",
+    "remainder": 0,
+    "price": "645.00"
+  }
+},
+{
   "model": "online_store.order",
   "pk": 1,
   "fields": {
     "name": "bebekkk",
     "tel": "0704000000",
     "address": "';,';",
+    "user": null,
     "created_at": "2021-04-05T12:31:34.918Z"
   }
 },
@@ -148,6 +160,7 @@
     "name": "bebekkk",
     "tel": "0704000000",
     "address": "';,';",
+    "user": null,
     "created_at": "2021-04-05T12:37:39.538Z"
   }
 },
@@ -158,6 +171,7 @@
     "name": "hey",
     "tel": "0704000000",
     "address": "';,';",
+    "user": null,
     "created_at": "2021-04-05T12:38:17.577Z"
   }
 },
@@ -168,7 +182,74 @@
     "name": "new",
     "tel": "new",
     "address": "neweewew",
+    "user": null,
     "created_at": "2021-04-05T12:59:16.500Z"
+  }
+},
+{
+  "model": "online_store.order",
+  "pk": 5,
+  "fields": {
+    "name": "test1",
+    "tel": "0704000000",
+    "address": "';,';",
+    "user": null,
+    "created_at": "2021-04-30T10:51:18.951Z"
+  }
+},
+{
+  "model": "online_store.order",
+  "pk": 6,
+  "fields": {
+    "name": "test1",
+    "tel": "0704000000",
+    "address": "';,';",
+    "user": 1,
+    "created_at": "2021-04-30T10:53:07.930Z"
+  }
+},
+{
+  "model": "online_store.order",
+  "pk": 7,
+  "fields": {
+    "name": "Окрошка",
+    "tel": "0704000000",
+    "address": "';,';",
+    "user": null,
+    "created_at": "2021-04-30T11:03:17.340Z"
+  }
+},
+{
+  "model": "online_store.order",
+  "pk": 8,
+  "fields": {
+    "name": "user",
+    "tel": "0704000000",
+    "address": "neweewew",
+    "user": 4,
+    "created_at": "2021-04-30T11:03:55.542Z"
+  }
+},
+{
+  "model": "online_store.order",
+  "pk": 9,
+  "fields": {
+    "name": "Амин",
+    "tel": "0704000000",
+    "address": "';,';",
+    "user": 1,
+    "created_at": "2021-04-30T11:24:26.498Z"
+  }
+},
+{
+  "model": "online_store.order",
+  "pk": 10,
+  "fields": {
+    "name": "bebekkk",
+    "tel": "0704000000",
+    "address": "neweewew",
+    "user": 1,
+    "created_at": "2021-04-30T11:27:04.492Z"
   }
 },
 {
@@ -235,59 +316,75 @@
   }
 },
 {
-  "model": "auth.user",
-  "pk": 1,
+  "model": "online_store.productorder",
+  "pk": 24,
   "fields": {
-    "password": "pbkdf2_sha256$216000$GnzSx6LOG7y5$cl/CXjbspHZnnOtA6WCP0oBxVN8tQIonBeUAApjdyoU=",
-    "last_login": "2021-04-22T19:33:33.757Z",
-    "is_superuser": true,
-    "username": "admin",
-    "first_name": "",
-    "last_name": "",
-    "email": "",
-    "is_staff": true,
-    "is_active": true,
-    "date_joined": "2021-03-04T14:03:48.845Z",
-    "groups": [],
-    "user_permissions": []
+    "product": 12,
+    "order": 6,
+    "qty": 1
   }
 },
 {
-  "model": "auth.user",
-  "pk": 3,
+  "model": "online_store.productorder",
+  "pk": 25,
   "fields": {
-    "password": "pbkdf2_sha256$216000$G0nGskuWHsXH$Z1hsrpMkFCAmQinyUKNX1tD7tGv4W0f46jhq5V26FzM=",
-    "last_login": "2021-04-22T19:39:31.096Z",
-    "is_superuser": false,
-    "username": "moder",
-    "first_name": "",
-    "last_name": "",
-    "email": "",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2021-04-22T19:08:07Z",
-    "groups": [
-      1
-    ],
-    "user_permissions": []
+    "product": 1,
+    "order": 6,
+    "qty": 1
   }
 },
 {
-  "model": "auth.user",
-  "pk": 4,
+  "model": "online_store.productorder",
+  "pk": 26,
   "fields": {
-    "password": "pbkdf2_sha256$216000$rI8OfnlqBQAV$OEzp1heCN9a6r8mlVkafLcbFoV/daOluxcpw9bxyYXw=",
-    "last_login": "2021-04-22T19:33:50.136Z",
-    "is_superuser": false,
-    "username": "user",
-    "first_name": "",
-    "last_name": "",
-    "email": "",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2021-04-22T19:10:10Z",
-    "groups": [],
-    "user_permissions": []
+    "product": 12,
+    "order": 7,
+    "qty": 1
+  }
+},
+{
+  "model": "online_store.productorder",
+  "pk": 27,
+  "fields": {
+    "product": 12,
+    "order": 8,
+    "qty": 1
+  }
+},
+{
+  "model": "online_store.productorder",
+  "pk": 28,
+  "fields": {
+    "product": 12,
+    "order": 9,
+    "qty": 1
+  }
+},
+{
+  "model": "online_store.productorder",
+  "pk": 29,
+  "fields": {
+    "product": 18,
+    "order": 9,
+    "qty": 1
+  }
+},
+{
+  "model": "online_store.productorder",
+  "pk": 30,
+  "fields": {
+    "product": 12,
+    "order": 10,
+    "qty": 1
+  }
+},
+{
+  "model": "online_store.productorder",
+  "pk": 31,
+  "fields": {
+    "product": 2,
+    "order": 10,
+    "qty": 1
   }
 }
 ]
