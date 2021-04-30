@@ -11,6 +11,7 @@ from .views import (
     DeleteCartView,
     CreateOrderView,
     UserOrderView,
+    StatView,
 )
 # app_name = 'store'
 urlpatterns = [
@@ -26,5 +27,6 @@ urlpatterns = [
     path('order/new',CreateOrderView.as_view(), name='order_create'),
     # path('user/order/new',CreateUserOrderView.as_view(), name='user_order_create'),
     path('user/orders',UserOrderView.as_view(), name='user_order_list'),
+    path('stat/',StatView.as_view(), name='stat'),
 
 ]

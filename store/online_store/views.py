@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -7,22 +9,107 @@ from django.urls import reverse, reverse_lazy
 from django.db.models import Q
 from django.utils.http import urlencode
 from django.contrib import messages
+from datetime import datetime, timedelta
 
 from .forms import ProductSearchForm, ProductForm, SearchForm, OrderForm
 from .models import Product, CATEGORY_CHOICES, CartProduct, ProductOrder, Order
 # Create your views here.
 
-class IndexProductView(ListView):
+class StatMixin:
+    request = None
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        self.set_common_stat()
+        self.set_page_time()
+        return super().dispatch(request, *args, **kwargs)
+
+    def set_common_stat(self):
+        print(self.request.path)
+        if 'stat' not in self.request.session:
+            self.request.session['stat'] = {}
+
+        stat = self.request.session.get('stat', {})
+        if 'common_start_time' not in stat:
+            stat['common_start_time'] = datetime.now().strftime('%d/%m/%y %H:%M:%S')
+        if 'common_click_count' not in stat:
+            stat['common_click_count'] = 1
+        else:
+            stat['common_click_count'] += 1
+        self.request.session['stat'] = stat
+
+
+    def set_page_time(self):
+        if 'stat' not in self.request.session:
+            self.request.session['stat'] = {}
+        stat = self.request.session.get('stat', {})
+        if 'page' not in stat.keys():
+            stat['page']={}
+        page=stat['page']
+        if self.request.path not in page:
+            page[self.request.path]={}
+            page[self.request.path]['time'] = 0
+            page[self.request.path]['click'] = 1
+        else:
+            page[self.request.path]['click'] +=1
+
+        if 'new' in stat:
+            old_time =page[stat['new']['path']]['time']
+            time = (datetime.now() - datetime.strptime(stat['new']['start'], '%d/%m/%y %H:%M:%S')).seconds
+            new_time = int(old_time) + time
+            page[stat['new']['path']]['time'] = new_time
+        else:
+            stat['new']={}
+        stat['new']['start'] = datetime.now().strftime('%d/%m/%y %H:%M:%S')
+        stat['new']['path'] = self.request.path
+
+        stat['page']=page
+        self.request.session['stat'] = stat
+
+
+class StatView(StatMixin, View):
+    def get(self, request, *args, **kwargs):
+        common_time = 0
+        clicks=0
+        if 'stat' not in self.request.session:
+            self.request.session['stat'] = {}
+        stat = self.request.session.get('stat', {})
+        stat = deepcopy(stat)
+
+        if 'common_start_time' in stat:
+            start = datetime.strptime(stat['common_start_time'], '%d/%m/%y %H:%M:%S')
+            end = datetime.now()
+            common_time = str(end - start)
+            clicks = stat['common_click_count']
+
+        if 'page' not in stat:
+            stat['page']={}
+        pages=stat['page']
+        print(f'pages={pages}')
+        for key,values in pages.items():
+            pages[key]['time'] = datetime.fromtimestamp(int(pages[key]['time'])).strftime("%H:%M:%S")
+
+        if '/stat/' in pages:
+            pages.pop('/stat/')
+
+        print(f'pages={pages}')
+
+        return render(request, 'stat.html', context={'time':common_time, 'cls':clicks, 'pages':pages})
+
+class IndexProductView(StatMixin, ListView):
     template_name = 'product/index.html'
     model = Product
     context_object_name = 'products'
     ordering = ('category', 'name')
     paginate_by = 5
 
+
     def get(self,request, **kwargs):
+        # self.set_time(request)
         self.form = SearchForm(request.GET)
         self.search_data = self.get_search_data()
-        print(f'session={self.request.session.get("products",{})}')
+        # print(f'session={self.request.session.get("products",{})}')
+        print(f'session={self.request.session.get("stat",{})}')
         return super().get(request, **kwargs)
 
     def get_queryset(self):
@@ -52,12 +139,12 @@ class IndexProductView(ListView):
             context['query'] = urlencode({'search_value': self.search_data})
         return context
 
-class ViewProductView(DetailView):
+class ViewProductView(StatMixin, DetailView):
     template_name = 'product/view.html'
     queryset = Product.objects.exclude(remainder=0)
     context_object_name = 'product'
 
-class CreateProductView(PermissionRequiredMixin, CreateView):
+class CreateProductView(PermissionRequiredMixin, StatMixin, CreateView):
     permission_required = ['online_store.add_product']
     template_name = 'product/create.html'
     model = Product
@@ -66,7 +153,7 @@ class CreateProductView(PermissionRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('product_view', kwargs={'pk': self.object.pk})
 
-class UpdateProductView(PermissionRequiredMixin,UpdateView):
+class UpdateProductView(PermissionRequiredMixin,StatMixin, UpdateView):
     permission_required = ['online_store.change_product']
     form_class = ProductForm
     model = Product
@@ -81,7 +168,7 @@ class UpdateProductView(PermissionRequiredMixin,UpdateView):
         queryset = queryset.exclude(remainder=0)
         return queryset
 
-class DeleteProductView(PermissionRequiredMixin, DeleteView):
+class DeleteProductView(PermissionRequiredMixin,StatMixin,  DeleteView):
     permission_required = ['online_store.delete_product']
     template_name = 'product/delete.html'
     model = Product
@@ -129,7 +216,7 @@ class AddToCartView(View):
 
         return redirect('cart_list')
 
-class IndexCartView(ListView):
+class IndexCartView(StatMixin, ListView):
     template_name = 'basket/index.html'
     model = CartProduct
     context_object_name = 'products'
@@ -187,21 +274,8 @@ class CreateOrderView(View):
             return redirect('cart_list')
 
 
-# class CreateUserOrderView(LoginRequiredMixin, View):
-#     def get(self, request, *args, **kwargs):
-#         print(Order.objects.all)
-#         if request.user.order.count()>0:
-#             order=Order.objects.get(user=request.user)
-#         else:
-#             order = Order(user=request.user)
-#             order.save()
-#         for product in CartProduct.objects.all():
-#             product_order=ProductOrder.objects.create(order=order, product=product.product, qty=product.qty)
-#             product_order.save()
-#         CartProduct.objects.all().delete()
-#         return redirect('product_list')
 
-class UserOrderView(LoginRequiredMixin, ListView):
+class UserOrderView(LoginRequiredMixin, StatMixin, ListView):
     template_name = 'product/user_orders.html'
     model = Order
     context_object_name = 'orders'
