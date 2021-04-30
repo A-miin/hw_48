@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %} Корзина {% endblock title %}
+{% block header-text %} Список товаров в корзине {% endblock header-text %}
+
+{% block content %}
+    {% if not orders %}
+        <h3>Нет заказов</h3>
+    {% endif %}
+    <table class="table">
+            <thead>
+            <tr>
+              <th scope="col">Название</th>
+              <th scope="col">Цена</th>
+              <th scope="col">Количество</th>
+              <th scope="col">Сумма</th>
+            </tr>
+          </thead>
+    <tbody>
+    {% for order in orders %}
+        {% for product in order.products.all %}
+            <tr>
+              <td> {{ product.product.name }}</td>
+              <td>{{ product.product.price }}</td>
+              <td>{{ product.qty }}</td>
+              <td>{{ product.summa }}</td>
+            </tr>
+        {% endfor %}
+        <tr>
+              <th> Total: </th>
+              <th>{{ order.get_total }}</th>
+              <th>Date:</th>
+              <th> {{ order.created_at }}</th>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+{% endblock content %}

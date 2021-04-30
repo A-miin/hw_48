@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, CartProduct, ProductOrder
+from .models import Product, CartProduct, ProductOrder, Order
 # Register your models here.
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'price', 'remainder']
@@ -19,3 +19,4 @@ class ProductOrderAdmin(admin.ModelAdmin):
 admin.site.register(Product, ProductAdmin)
 admin.site.register(CartProduct, CartProductAdmin)
 admin.site.register(ProductOrder, ProductOrderAdmin)
+admin.site.register(Order)

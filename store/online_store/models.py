@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.core.validators import MinValueValidator
 
@@ -44,13 +45,25 @@ class CartProduct(models.Model):
         return summa
 
 class Order(models.Model):
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128  )
     tel = models.CharField(max_length=128)
-    address = models.CharField(max_length=256)
+    address = models.CharField(max_length=256 )
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True, blank=True, related_name='order' )
     created_at=models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name='Заказчик'
+        verbose_name_plural='Заказчики'
+
+    def get_total(self):
+        total=0
+        ordered_products = ProductOrder.objects.filter(order = self)
+        for ordered_product in ordered_products:
+            total+=ordered_product.summa()
+        return total
+
     def __str__(self):
-        return self.name
+        return f'{self.name}:{self.user}'
 
 class ProductOrder(models.Model):
     product = models.ForeignKey('online_store.Product', on_delete=models.CASCADE, related_name='orders')
@@ -60,6 +73,10 @@ class ProductOrder(models.Model):
     class Meta:
         verbose_name='Заказ'
         verbose_name_plural='Заказы'
+
+    def summa(self):
+        return self.product.price*self.qty
+
 
     def __str__(self):
         return f'{self.order.name}:{self.product.name}-{self.qty}'

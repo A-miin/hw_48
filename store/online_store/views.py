@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404, redirect
@@ -11,6 +11,7 @@ from django.contrib import messages
 from .forms import ProductSearchForm, ProductForm, SearchForm, OrderForm
 from .models import Product, CATEGORY_CHOICES, CartProduct, ProductOrder, Order
 # Create your views here.
+
 class IndexProductView(ListView):
     template_name = 'product/index.html'
     model = Product
@@ -29,7 +30,6 @@ class IndexProductView(ListView):
         if self.kwargs.get('category'):
             queryset = queryset.filter(category=self.kwargs.get('category'))
         queryset = queryset.exclude(remainder=0)
-        print('kwargs=',self.kwargs)
 
         if self.search_data:
             queryset = queryset.filter(
@@ -137,6 +137,7 @@ class IndexCartView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form']=OrderForm()
+
         return context
 
 
@@ -170,6 +171,10 @@ class CreateOrderView(View):
                 tel=form.cleaned_data.get('tel'),
                 address=form.cleaned_data.get('address')
             )
+            if request.user.is_authenticated:
+                order.user=request.user
+                order.save()
+
             for product in CartProduct.objects.all():
                 product_order=ProductOrder.objects.create(order=order, product=product.product, qty=product.qty)
                 product_order.save()
@@ -181,4 +186,28 @@ class CreateOrderView(View):
             print('errors')
             return redirect('cart_list')
 
+
+# class CreateUserOrderView(LoginRequiredMixin, View):
+#     def get(self, request, *args, **kwargs):
+#         print(Order.objects.all)
+#         if request.user.order.count()>0:
+#             order=Order.objects.get(user=request.user)
+#         else:
+#             order = Order(user=request.user)
+#             order.save()
+#         for product in CartProduct.objects.all():
+#             product_order=ProductOrder.objects.create(order=order, product=product.product, qty=product.qty)
+#             product_order.save()
+#         CartProduct.objects.all().delete()
+#         return redirect('product_list')
+
+class UserOrderView(LoginRequiredMixin, ListView):
+    template_name = 'product/user_orders.html'
+    model = Order
+    context_object_name = 'orders'
+
+    def get_queryset(self):
+        queryset = self.request.user.order.all().order_by('created_at')
+
+        return queryset
 
