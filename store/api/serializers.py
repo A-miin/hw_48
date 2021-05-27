@@ -13,7 +13,7 @@ class ProductSerializer(serializers.ModelSerializer):
 class ProductOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductOrder
-        fields = ('id', 'order', 'product', 'qty')
+        fields = ('id', 'product', 'qty')
 
 class OrderSerializer(serializers.ModelSerializer):
     products = ProductOrderSerializer(many=True)
