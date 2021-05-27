@@ -4,7 +4,11 @@ from api import views
 
 router = routers.DefaultRouter()
 router.register(r'products', views.ProductViewSet)
+router.register(r'orders', views.OrderViewSet)
+
+
 app_name = 'api_1'
+
 
 urlpatterns = [
     path('', include(router.urls)),
